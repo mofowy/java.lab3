@@ -5,10 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileService {
+
     public void generateReceiptFile(final String baseFileName, final Receipt receipt) throws ReceiptGenerationException {
         final String fileName = baseFileName + "_" + receipt.getCustomer().getName() + "_" + receipt.getCustomer().getSurname() + ".txt";
 

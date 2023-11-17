@@ -1,7 +1,6 @@
 package Task;
 
 import java.io.FileNotFoundException;
-import Task.FileLoadException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,72 +12,64 @@ public class Main {
 
         Store store = new Store();
 
-        // Завантаження даних з файлу
-        store.loadProductsFromFile("D:\\products.txt");
+        store.loadProductsFromFile("text.txt");
 
-        // Отримання всіх продуктів
         List<Product> allProducts = store.getProducts();
 
-        // Продаж продукту
+        if (!allProducts.isEmpty()) {
+            store.removeProduct(allProducts.get(0));
+        } else {
+            System.out.println("List is blank.");
+        }
+
         store.removeProduct(allProducts.get(0));
 
-        // Редагування продукту
-        store.addProduct(new Product("New Apple", 5.0, 15));
+        store.addProduct(new Product("Apple", 5.0, 15));
 
-        // Збереження історії покупок
         store.saveOrdersHistory();
 
-        // Створення замовлення
         Customer customer = new Customer("John", "Doe");
         List<Product> orderProducts = store.getProducts();
         store.makeOrder(customer, orderProducts);
 
         List<Order> orders = new ArrayList<>();
-        // Додаємо замовлення до списку
+
         Order order = new Order(LocalDate.now(), customer, orderProducts, false);
         orders.add(order);
 
-        // Перевіряємо наявність замовлень перед викликом generateReceipt
         if (!orders.isEmpty()) {
             store.generateReceipt(orders.get(0));
         } else {
-            System.out.println("Список замовлень порожній. Немає замовлень для створення чека.");
+            System.out.println("Order list is empty.");
         }
 
-        // Генерація чека
         store.generateReceipt(customer, orderProducts);
 
-        // Фільтрування продуктів за ціною
-        List<Product> filteredProducts = store.loadProductsFromFile("your_file_name.txt");
-        System.out.println("Фільтровані продукти:");
+        List<Product> filteredProducts = store.loadProductsFromFile("products.txt");
+        System.out.println("Filtered products:");
         for (Product product : filteredProducts) {
             System.out.println(product);
         }
 
-        // Визначення середньої ціни
         double averagePrice = store.getAveragePrice();
-        System.out.println("Середня ціна: " + averagePrice);
+        System.out.println("Avg price: " + averagePrice);
 
-        // Визначення витрат заданого користувача за заданий період часу
         List<Order> ordersByUser = store.getOrdersHistoryByUser("user1");
-        System.out.println("Витрати користувача user1:");
+        System.out.println("User1's money spend:");
         for (Order currentorder : ordersByUser) {
             System.out.println(order);
         }
 
-        // Отримання даних про сумарну кількість кожного купленого продукту заданого користувача
         Map<String, Integer> productsQuantityByUser = store.getProductsQuantityByUser("user1");
-        System.out.println("Дані про сумарні кількості продуктів, куплених користувачем user1:");
+        System.out.println("All products was buyed by user1:");
         for (String productName : productsQuantityByUser.keySet()) {
             System.out.println(productName + ": " + productsQuantityByUser.get(productName));
         }
 
-        // Знаходження найпопулярнішого продукту
         Product mostPopularProduct = store.getMostPopularProduct();
-        System.out.println("Найпопулярніший продукт: " + mostPopularProduct);
+        System.out.println("Most popular product: " + mostPopularProduct);
 
-        // Знаходження найбільшого доходу за день
         int highestIncomeForDay = store.getHighestIncomeForDay();
-        System.out.println("Найбільший дохід за день: " + highestIncomeForDay);
+        System.out.println("Most income for day: " + highestIncomeForDay);
     }
 }

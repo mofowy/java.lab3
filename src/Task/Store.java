@@ -25,6 +25,7 @@ public class Store {
         return products;
     }
 
+
     public void setProducts(final List<Product> products) {
         this.products = products;
     }
@@ -55,7 +56,9 @@ public class Store {
     }
 
     public List<Product> loadProductsFromFile(final String fileName) throws FileLoadException {
-        return this.fileService.loadProductsFromFile(fileName);
+        List<Product> loadedProducts = this.fileService.loadProductsFromFile(fileName);
+        this.products.addAll(loadedProducts);
+        return loadedProducts;
     }
 
     public void makeOrder(Customer customer, List<Product> products) throws ReceiptGenerationException {
@@ -75,7 +78,6 @@ public class Store {
                 .collect(Collectors.toList());
     }
 
-    // Метод для отримання даних про сумарну кількість кожного купленого продукту користувача
     public Map<String, Integer> getProductsQuantityByUser(String userName) {
         Map<String, Integer> productsQuantityByUser = new HashMap<>();
 
@@ -87,7 +89,6 @@ public class Store {
         return productsQuantityByUser;
     }
 
-    // Метод для отримання найпопулярнішого продукту
     public Product getMostPopularProduct() {
         Map<String, Integer> productQuantityMap = new HashMap<>();
 
@@ -101,7 +102,6 @@ public class Store {
                 .orElse(null);
     }
 
-    // Метод для отримання найбільшого доходу за день
     public int getHighestIncomeForDay() {
         Map<LocalDate, Double> incomeByDay = orders.stream()
                 .collect(Collectors.groupingBy(Order::getDate, Collectors.summingDouble(order -> calculateTotalPrice(order.getProducts()))));
@@ -120,7 +120,6 @@ public class Store {
     public void generateReceipt(Order order) throws ReceiptGenerationException {
         final Receipt receipt = new Receipt(LocalDate.now(), order.getCustomer(), order.getProducts(), false);
 
-        // Створення ім'я файлу на основі імені та прізвища клієнта
         final String fileName = "receipt_" + order.getCustomer().getName() + "_" + order.getCustomer().getSurname() + ".txt";
 
         try (final BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
@@ -145,7 +144,6 @@ public class Store {
             throw new ReceiptGenerationException("Error generating receipt.");
         }
     }
-    // Допоміжний метод для розрахунку загальної ціни продуктів у замовленні
     private double calculateTotalPrice(List<Product> products) {
         return products.stream().mapToDouble(product -> product.getPrice() * product.getQuantity()).sum();
     }
