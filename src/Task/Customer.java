@@ -1,6 +1,6 @@
 package Task;
 
-public class Customer {
+public final class Customer {
 
     private String name;
     private String surname;
@@ -28,9 +28,6 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
+        return "Customer{" + "name='" + name + '\'' + ", surname='" + surname + '\'' + '}';
     }
 }
